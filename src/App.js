@@ -3,7 +3,9 @@ import "./styles.css";
 
 const timeout = (seconds) => {
   return new Promise(function (resolve, _) {
-    setTimeout(resolve, seconds);
+    const timer = Math.random() * 1234567890;
+    console.log(`inside promise timer value is = ${timer}`);
+    setTimeout(() => resolve(timer), seconds);
   });
 };
 
@@ -17,12 +19,13 @@ export default function App() {
 
   React.useEffect(() => {
     console.log("inside useeffect");
-    let isCancelled = false;
+    let isCancelled = false,
+      res;
     const changeHandler = async () => {
-      console.log("inside changehandler");
-      await timeout(1000).then(() => {
+      console.log("inside change handler");
+      await timeout(1000).then((response) => {
+        res = response;
         if (!isCancelled) {
-          alert(text);
           console.log({ message });
         }
       });
@@ -31,7 +34,11 @@ export default function App() {
     changeHandler();
     return () => {
       console.clear();
-      console.log("inside return of useeffect", { isCancelled, text });
+      console.log("inside return of cleaning", {
+        isCancelled,
+        text,
+        "previous value: ": res,
+      });
       isCancelled = true;
     };
   }, [text]);
